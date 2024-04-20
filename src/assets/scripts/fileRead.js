@@ -1,4 +1,4 @@
-let jsonFile=require('./Streaming_History.json');
+import jsonFile from './Streaming_History.json';
 // console.log(jsonFile);
 
 let sum=0;
@@ -28,7 +28,7 @@ let hrTot=minTot/60; //convert to hours
 // console.log('Total unique albums listened: '+new Set(trackAlbums).size);
 // console.log('Total unique URLs listened: '+new Set(trackURLs).size); //Each trackURL is unique and will not be repeated
 
-uniqueTrackArtists=new Set(trackArtists);
+let uniqueTrackArtists=new Set(trackArtists);
 // console.log(uniqueTrackArtists)
 
 let hrFR=hrTot%1 //get the decimal part of the hours
@@ -42,7 +42,7 @@ let secFR=secF%1 //get the decimal part of the seconds
 
 let msF=secFR*1000 //convert the decimal part of the seconds to milliseconds
 
-hrF=hrTot-hrFR //get the whole hours
+let hrF=hrTot-hrFR //get the whole hours
 minF=minF-(minF%1) //get the whole minutes
 secF=secF-(secF%1) //get the whole seconds
 msF=msF-(msF%1) //get the whole milliseconds
@@ -53,3 +53,36 @@ console.log(minF + ' Minutes') //minutes whole
 console.log(secF + ' Seconds') //seconds whole
 console.log(msF+ ' Milliseconds') //milliseconds whole
 
+function fileInfo(){
+    return{
+        getUserName: function () {
+            return userName;
+        },
+        getTotalTime: function () {
+            let time=[]
+            time.push(hrF)
+            time.push(minF)
+            time.push(secF)
+            time.push(msF)
+            return time;
+        },
+        getTotalTracks: function () {
+            return jsonFile.length;
+        },
+        getTrackNames: function () {
+            return trackNames;
+        },
+        getTrackUrl: function () {
+            return trackURLs;
+        },
+        getTrackAlbums: function () {
+            return trackAlbums;
+        },
+        getTrackArtists: function () {
+            return trackArtists;
+        }
+
+    }
+}
+
+export default fileInfo();
