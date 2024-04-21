@@ -7,9 +7,11 @@ let trackArtists = [];
 let trackAlbums = [];
 let trackURLs = [];
 let userName = "";
+let timePlayedAt = [];
 
 for (let i = 0; i < jsonFile.length; i++) {
 	sum += jsonFile[i].ms_played;
+	timePlayedAt.push(jsonFile[i].ts);
 	trackNames.push(jsonFile[i].master_metadata_track_name);
 	trackArtists.push(jsonFile[i].master_metadata_album_artist_name);
 	trackAlbums.push(jsonFile[i].master_metadata_album_album_name);
@@ -135,6 +137,9 @@ function fileInfo() {
 				timeString = "Null";
 			}
 			return timeString;
+		},
+		getWhenPlayed: function () {
+			return timePlayedAt;
 		},
 	};
 }
