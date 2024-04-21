@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import fData from "./fileRead.js";
 import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
 
 function createData(artist, name, time) {
 	return { artist, name, time };
@@ -77,6 +78,7 @@ for (let i = 0; i < artists.length; i++) {
 export default function BasicTable() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [filter, setFilter] = useState("");
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -85,6 +87,10 @@ export default function BasicTable() {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
+	};
+
+	const handleFilterChange = (event) => {
+		setFilter(event.target.value);
 	};
 
 	const uniqueRows = rows.reduce((unique, row) => {
@@ -100,6 +106,11 @@ export default function BasicTable() {
 
 	return (
 		<Paper sx={{ width: "100%", overflow: "hidden" }}>
+			<TextField
+				label="Filter by song or artist"
+				value={filter}
+				onChange={handleFilterChange}
+			/>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
 					<TableHead>
@@ -110,6 +121,15 @@ export default function BasicTable() {
 						</TableRow>
 					</TableHead>
 					{uniqueRows
+						.filter(
+							(row) =>
+								(row.name
+									? row.name.toLowerCase().includes(filter.toLowerCase())
+									: false) ||
+								(row.artist
+									? row.artist.toLowerCase().includes(filter.toLowerCase())
+									: false)
+						)
 						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 						.map((row, index) => (
 							<TableRow
@@ -134,7 +154,17 @@ export default function BasicTable() {
 			<TablePagination
 				rowsPerPageOptions={[10, 25, 100]}
 				component="div"
-				count={uniqueRows.length}
+				count={
+					uniqueRows.filter(
+						(row) =>
+							(row.name
+								? row.name.toLowerCase().includes(filter.toLowerCase())
+								: false) ||
+							(row.artist
+								? row.artist.toLowerCase().includes(filter.toLowerCase())
+								: false)
+					).length
+				}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				onPageChange={handleChangePage}
