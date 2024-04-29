@@ -20,12 +20,6 @@ let rows = [];
 let artists = fData.getTrackArtists();
 let names = fData.getTrackNames();
 
-for (let i = 0; i < artists.length; i++) {
-	rows.push(
-		createData(artists[i], names[i], fData.getTrackTimeUnique(names[i], 1))
-	);
-}
-
 export default function BasicTable() {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -51,6 +45,20 @@ export default function BasicTable() {
 			setCurrentFilter(filterRef.current.value);
 		}
 	};
+
+	useEffect(() => {
+		let newRows = [];
+		let artists = fData.getTrackArtists();
+		let names = fData.getTrackNames();
+
+		for (let i = 0; i < artists.length; i++) {
+			newRows.push(
+				createData(artists[i], names[i], fData.getTrackTimeUnique(names[i], 1))
+			);
+		}
+
+		setRows(newRows);
+	}, [fData]);
 
 	const uniqueRows = rows.reduce((unique, row) => {
 		if (

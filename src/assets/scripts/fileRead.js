@@ -1,4 +1,4 @@
-import jsonFile from "./Streaming_History.json";
+// import jsonFile from "./Streaming_History.json";
 // console.log(jsonFile);
 
 let sum = 0;
@@ -8,17 +8,6 @@ let trackAlbums = [];
 let trackURLs = [];
 let userName = "";
 let timePlayedAt = [];
-
-for (let i = 0; i < jsonFile.length; i++) {
-	sum += jsonFile[i].ms_played;
-	timePlayedAt.push(jsonFile[i].ts);
-	trackNames.push(jsonFile[i].master_metadata_track_name);
-	trackArtists.push(jsonFile[i].master_metadata_album_artist_name);
-	trackAlbums.push(jsonFile[i].master_metadata_album_album_name);
-	trackURLs.push(jsonFile[i].spotify_track_uri);
-	userName = jsonFile[i].username;
-}
-
 // console.log('User: '+userName);
 // console.log('Total time listened: '+hrTot+' hours');
 // console.log('Total tracks listened: '+jsonFile.length);
@@ -31,7 +20,20 @@ let uniqueTrackArtists = new Set(trackArtists);
 // console.log(uniqueTrackArtists)
 
 function fileInfo() {
+	let jsonFile;
 	return {
+		setFile: function (jsonContent) {
+			let jsonFile = jsonContent;
+			for (let i = 0; i < jsonFile.length; i++) {
+				sum += jsonFile[i].ms_played;
+				timePlayedAt.push(jsonFile[i].ts);
+				trackNames.push(jsonFile[i].master_metadata_track_name);
+				trackArtists.push(jsonFile[i].master_metadata_album_artist_name);
+				trackAlbums.push(jsonFile[i].master_metadata_album_album_name);
+				trackURLs.push(jsonFile[i].spotify_track_uri);
+				userName = jsonFile[i].username;
+			}
+		},
 		getUserName: function () {
 			return userName;
 		},
